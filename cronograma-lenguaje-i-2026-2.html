@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cronograma Lenguaje I 2026-2 | Universidad del Pacífico</title>
+  <meta name="description" content="Cronograma interactivo de Lenguaje I - Semestre 2026-2" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2c5282;
+      --accent: #c53030;
+      --accent-soft: #fed7d7;
+      --success: #276749;
+      --success-soft: #c6f6d5;
+      --warning: #975a16;
+      --warning-soft: #fefcbf;
+      --bg: #f7fafc;
+      --card: #ffffff;
+      --text: #1a202c;
+      --text-muted: #718096;
+      --border: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 1.75rem 1.25rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .header p {
+      opacity: 0.9;
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    /* Controls */
+    .controls {
+      max-width: 1100px;
+      margin: 1.25rem auto;
+      padding: 0 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 0.7rem 1rem 0.7rem 2.5rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      background: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(44,82,130,0.15);
+    }
+    .search-box::before {
+      content: "🔍";
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9rem;
+      opacity: 0.6;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .filter-btn {
+      padding: 0.45rem 0.9rem;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-muted);
+    }
+    .filter-btn:hover { background: #edf2f7; }
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .filter-btn.eval.active {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .view-toggle {
+      display: flex;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .view-btn {
+      padding: 0.5rem 0.9rem;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .view-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Main content */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+    }
+
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .stat-card .num {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .stat-card .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    /* Table view */
+    .table-wrapper {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    thead {
+      background: var(--primary);
+      color: white;
+    }
+    th {
+      padding: 0.9rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafc; }
+
+    .semana {
+      font-weight: 700;
+      color: var(--primary);
+      width: 70px;
+    }
+    .fecha {
+      white-space: nowrap;
+      color: var(--text-muted);
+      font-weight: 500;
+      width: 90px;
+    }
+    .contenido ul {
+      list-style: none;
+      padding: 0;
+    }
+    .contenido li {
+      position: relative;
+      padding-left: 0.9rem;
+      margin-bottom: 0.2rem;
+    }
+    .contenido li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--primary-light);
+    }
+
+    .eval-tag {
+      display: inline-block;
+      padding: 0.25rem 0.7rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
+    }
+    .eval-pc { background: var(--accent-soft); color: var(--accent); }
+    .eval-parcial { background: #feebc8; color: #c05621; }
+    .eval-final { background: #e9d8fd; color: #553c9a; }
+    .feriado { background: #e2e8f0; color: #4a5568; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 6px; }
+
+    /* Cards view */
+    .cards-grid {
+      display: none;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+    .cards-grid.active { display: grid; }
+    .table-wrapper.hidden { display: none; }
+
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 20px -5px rgba(0,0,0,0.1);
+    }
+    .card-header {
+      background: var(--primary);
+      color: white;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-header .week { font-weight: 700; font-size: 1rem; }
+    .card-header .date { font-size: 0.85rem; opacity: 0.9; }
+    .card-body { padding: 1rem; }
+    .card-body ul {
+      list-style: none;
+      margin-bottom: 0.75rem;
+    }
+    .card-body li {
+      padding: 0.3rem 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 0.9rem;
+    }
+    .card-body li:last-child { border-bottom: none; }
+    .card.eval-card .card-header { background: var(--accent); }
+    .card.feriado-card .card-header { background: #718096; }
+
+    /* Considerations */
+    .consideraciones {
+      margin-top: 2rem;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .consideraciones-header {
+      background: #2d3748;
+      color: white;
+      padding: 0.9rem 1.25rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .consideraciones-body {
+      padding: 1.25rem;
+      font-size: 0.9rem;
+    }
+    .consideraciones-body ul {
+      list-style: none;
+    }
+    .consideraciones-body li {
+      margin-bottom: 1rem;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+    .consideraciones-body li::before {
+      content: "⚠";
+      position: absolute;
+      left: 0;
+    }
+    .consideraciones-body strong { color: var(--accent); }
+
+    /* Empty state */
+    .empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      display: none;
+    }
+    .empty.show { display: block; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      .header h1 { font-size: 1.25rem; }
+      th:nth-child(1), td:nth-child(1) { display: none; }
+      .controls { flex-direction: column; align-items: stretch; }
+      .filters { justify-content: center; }
+      table { font-size: 0.85rem; }
+      td, th { padding: 0.7rem 0.6rem; }
+    }
+
+    /* Highlight animation */
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(197,48,48,0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(197,48,48,0); }
+    }
+    .highlight-eval {
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>Lenguaje I — Cronograma 2026-2</h1>
+    <p>Universidad del Pacífico · Anexo del sílabo</p>
+    <span class="badge">Interactivo</span>
+  </header>
+
+  <div class="controls">
+    <div class="search-box">
+      <input type="text" id="search" placeholder="Buscar contenido, fecha o evaluación..." autocomplete="off" />
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Todo</button>
+      <button class="filter-btn eval" data-filter="eval">Solo evaluaciones</button>
+      <button class="filter-btn" data-filter="sintaxis">Sintaxis</button>
+      <button class="filter-btn" data-filter="linguistica">Lingüística</button>
+      <button class="filter-btn" data-filter="redaccion">Redacción</button>
+    </div>
+    <div class="view-toggle">
+      <button class="view-btn active" data-view="table">Tabla</button>
+      <button class="view-btn" data-view="cards">Tarjetas</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="stats">
+      <div class="stat-card">
+        <div class="num" id="stat-semanas">16</div>
+        <div class="label">Semanas</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="stat-sesiones">30</div>
+        <div class="label">Sesiones</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="stat-evals">5</div>
+        <div class="label">Evaluaciones</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">11/08 → 25/11</div>
+        <div class="label">Periodo</div>
+      </div>
+    </div>
+
+    <!-- TABLE VIEW -->
+    <div class="table-wrapper" id="table-view">
+      <table>
+        <thead>
+          <tr>
+            <th>Semana</th>
+            <th>Fecha</th>
+            <th>Contenidos</th>
+            <th>Evaluación</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+
+    <!-- CARDS VIEW -->
+    <div class="cards-grid" id="cards-view"></div>
+
+    <div class="empty" id="empty">
+      No se encontraron resultados con ese filtro o búsqueda.
+    </div>
+
+    <!-- Consideraciones -->
+    <div class="consideraciones">
+      <div class="consideraciones-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+        <span>Consideraciones importantes para las evaluaciones</span>
+        <span>▼</span>
+      </div>
+      <div class="consideraciones-body">
+        <ul>
+          <li>
+            <strong>Prácticas calificadas (PC):</strong> La ausencia a una práctica recibe nota de <strong>0 (cero)</strong>. Solo accede a la práctica de rezagados al final del semestre el estudiante que presente de inmediato una justificación escrita válida. Si falta a más de una práctica, solo puede recuperar <strong>una</strong> mediante la de rezagados (la otra será cero necesariamente).
+          </li>
+          <li>
+            <strong>Exámenes:</strong> Los estudiantes que falten a algún examen deben tramitar con <strong>Servicios Académicos</strong> el acceso al examen de rezagados. Las reclamaciones de nota se tramitan exclusivamente a través de <strong>SAR</strong>. Si un alumno se comunica con el profesor por otros medios para pedir modificación de nota, su pedido de recalificación se <strong>invalidará</strong>.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Cronograma interactivo · Lenguaje I 2026-2 · Universidad del Pacífico
+  </footer>
+
+  <script>
+    const data = [
+      { semana: 1, fecha: "11/08", contenido: ["Presentación del curso", "Repaso de la oración simple"], eval: null, tags: ["sintaxis"] },
+      { semana: 1, fecha: "13/08", contenido: ["Repaso de la oración simple"], eval: null, tags: ["sintaxis"] },
+      { semana: 2, fecha: "18/08", contenido: ["Coordinación de proposiciones"], eval: null, tags: ["sintaxis"] },
+      { semana: 2, fecha: "20/08", contenido: ["Coordinación de proposiciones"], eval: null, tags: ["sintaxis"] },
+      { semana: 3, fecha: "25/08", contenido: ["Subordinación sustantiva"], eval: null, tags: ["sintaxis"] },
+      { semana: 3, fecha: "27/08", contenido: ["Subordinación sustantiva"], eval: null, tags: ["sintaxis"] },
+      { semana: 4, fecha: "01/09", contenido: ["Subordinación adjetiva"], eval: null, tags: ["sintaxis"] },
+      { semana: 4, fecha: "03/09", contenido: ["Repaso para la PC1"], eval: null, tags: ["sintaxis"] },
+      { semana: 5, fecha: "08/09", contenido: [], eval: "PC1", tags: ["eval"] },
+      { semana: 5, fecha: "10/09", contenido: ["Subordinación adjetiva (definiciones)"], eval: null, tags: ["sintaxis"] },
+      { semana: 6, fecha: "15/09", contenido: ["Subordinación adverbial", "Revisión de la PC1"], eval: null, tags: ["sintaxis"] },
+      { semana: 6, fecha: "17/09", contenido: ["Subordinación NO-MNO: concesiva, condicional, causal y consecutiva"], eval: null, tags: ["sintaxis"] },
+      { semana: 7, fecha: "22/09", contenido: ["Errores sintácticos frecuentes"], eval: null, tags: ["sintaxis"] },
+      { semana: 7, fecha: "24/09", contenido: ["Repaso para el examen parcial"], eval: null, tags: ["sintaxis"] },
+      { semana: 8, fecha: "30/09", contenido: [], eval: "EXAMEN PARCIAL", tags: ["eval"] },
+      { semana: 8, fecha: "06/10", contenido: ["Referentes y conectores"], eval: null, tags: ["sintaxis"] },
+      { semana: 9, fecha: "08/10", contenido: ["FERIADO"], eval: null, tags: ["feriado"] },
+      { semana: 9, fecha: "13/10", contenido: ["Saberes lingüísticos"], eval: null, tags: ["linguistica"] },
+      { semana: 10, fecha: "15/10", contenido: ["Naturaleza del lenguaje"], eval: null, tags: ["linguistica"] },
+      { semana: 10, fecha: "20/10", contenido: ["Naturaleza del lenguaje", "(Repaso para la PC2)"], eval: null, tags: ["linguistica"] },
+      { semana: 11, fecha: "22/10", contenido: [], eval: "PC2", tags: ["eval"] },
+      { semana: 11, fecha: "27/10", contenido: ["Funciones del lenguaje"], eval: null, tags: ["linguistica"] },
+      { semana: 12, fecha: "29/10", contenido: ["Denotación y connotación", "Revisión de la PC2"], eval: null, tags: ["linguistica"] },
+      { semana: 12, fecha: "03/11", contenido: ["Sistema, norma y habla"], eval: null, tags: ["linguistica"] },
+      { semana: 13, fecha: "05/11", contenido: ["Repaso para la PC3"], eval: null, tags: ["redaccion"] },
+      { semana: 14, fecha: "10/11", contenido: [], eval: "PC3", tags: ["eval"] },
+      { semana: 14, fecha: "12/11", contenido: ["Esquema y resumen 1: Esquema"], eval: null, tags: ["redaccion"] },
+      { semana: 15, fecha: "17/11", contenido: ["Esquema y resumen 2: Redacción del párrafo del resumen", "Revisión de la PC3"], eval: null, tags: ["redaccion"] },
+      { semana: 15, fecha: "19/11", contenido: ["Repaso para el examen final"], eval: null, tags: ["redaccion"] },
+      { semana: 16, fecha: "25/11", contenido: [], eval: "EXAMEN FINAL", tags: ["eval"] }
+    ];
+
+    let currentFilter = "all";
+    let currentView = "table";
+    let searchTerm = "";
+
+    function getEvalClass(evalName) {
+      if (!evalName) return "";
+      if (evalName.includes("PC")) return "eval-pc";
+      if (evalName.includes("PARCIAL")) return "eval-parcial";
+      if (evalName.includes("FINAL")) return "eval-final";
+      return "";
+    }
+
+    function render() {
+      const filtered = data.filter(item => {
+        // Filter
+        if (currentFilter === "eval" && !item.eval) return false;
+        if (currentFilter === "sintaxis" && !item.tags.includes("sintaxis")) return false;
+        if (currentFilter === "linguistica" && !item.tags.includes("linguistica")) return false;
+        if (currentFilter === "redaccion" && !item.tags.includes("redaccion")) return false;
+
+        // Search
+        if (searchTerm) {
+          const text = [
+            item.semana,
+            item.fecha,
+            ...(item.contenido || []),
+            item.eval || ""
+          ].join(" ").toLowerCase();
+          if (!text.includes(searchTerm.toLowerCase())) return false;
+        }
+        return true;
+      });
+
+      // Empty state
+      document.getElementById("empty").classList.toggle("show", filtered.length === 0);
+
+      // Table
+      const tbody = document.getElementById("table-body");
+      tbody.innerHTML = filtered.map(item => {
+        const isEval = !!item.eval;
+        const isFeriado = item.contenido.includes("FERIADO");
+        return `
+          <tr class="${isEval ? 'highlight-eval' : ''}">
+            <td class="semana">${item.semana}</td>
+            <td class="fecha">${item.fecha}</td>
+            <td class="contenido">
+              ${isFeriado 
+                ? `<span class="feriado">FERIADO</span>` 
+                : item.contenido.length 
+                  ? `<ul>${item.contenido.map(c => `<li>${c}</li>`).join("")}</ul>` 
+                  : "—"}
+            </td>
+            <td>
+              ${item.eval 
+                ? `<span class="eval-tag ${getEvalClass(item.eval)}">${item.eval}</span>` 
+                : ""}
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      // Cards
+      const cards = document.getElementById("cards-view");
+      cards.innerHTML = filtered.map(item => {
+        const isEval = !!item.eval;
+        const isFeriado = item.contenido.includes("FERIADO");
+        let cardClass = "card";
+        if (isEval) cardClass += " eval-card";
+        if (isFeriado) cardClass += " feriado-card";
+
+        return `
+          <div class="${cardClass}">
+            <div class="card-header">
+              <span class="week">Semana ${item.semana}</span>
+              <span class="date">${item.fecha}</span>
+            </div>
+            <div class="card-body">
+              ${isFeriado 
+                ? `<p><span class="feriado">FERIADO</span></p>` 
+                : item.contenido.length 
+                  ? `<ul>${item.contenido.map(c => `<li>${c}</li>`).join("")}</ul>` 
+                  : "<p style='color:#a0aec0'>—</p>"}
+              ${item.eval 
+                ? `<span class="eval-tag ${getEvalClass(item.eval)}">${item.eval}</span>` 
+                : ""}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // Events
+    document.getElementById("search").addEventListener("input", e => {
+      searchTerm = e.target.value.trim();
+      render();
+    });
+
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentFilter = btn.dataset.filter;
+        render();
+      });
+    });
+
+    document.querySelectorAll(".view-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".view-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentView = btn.dataset.view;
+        document.getElementById("table-view").classList.toggle("hidden", currentView !== "table");
+        document.getElementById("cards-view").classList.toggle("active", currentView === "cards");
+      });
+    });
+
+    // Initial render
+    render();
+  </script>
+</body>
+</html>
